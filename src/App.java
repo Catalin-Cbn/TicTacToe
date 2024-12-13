@@ -10,19 +10,19 @@ public class App {
         int riga = 0, colonna = 0;
         boolean again = true; // Permette di continuare il gioco
         boolean vittoria = false, vittoriaPC = false, newGame = false;
-        int caselle = 0;
+
         String[][] tris = new String[3][3];
         int[] turno = new int[2]; // Indica i turni, 0: utente, 1: computer
 
-        // Inizializzazione del tabellone
-        for (int i = 0; i < tris.length; i++) {
-            for (int j = 0; j < tris[i].length; j++) {
-                tris[i][j] = "-";
-            }
-        }
-
         // Ciclo del gioco
         do {
+            // Inizializzazione del tabellone
+            for (int i = 0; i < tris.length; i++) {
+                for (int j = 0; j < tris[i].length; j++) {
+                    tris[i][j] = "-";
+                }
+            }
+            int caselle = 0;
             do {
                 for (int t = 0; t < turno.length; t++) {
                     if (t == 0) { // Turno utente
@@ -32,7 +32,7 @@ public class App {
                             System.out.println("E in che colonna? (0-1-2)");
                             colonna = sc.nextInt();
                             sc.nextLine(); // Consuma l'input rimanente
-    
+
                             if (riga < 0 || riga > 2 || colonna < 0 || colonna > 2 ||
                                     tris[riga][colonna].equals("X") || tris[riga][colonna].equals("O")) {
                                 System.out.println("Inserimento non valido. Riprova");
@@ -49,7 +49,7 @@ public class App {
                                 vittoria = true;
                             }
                         }
-    
+
                         // controllo colonne
                         for (int j = 0; j < 3; j++) {
                             if (tris[0][j].equals(tris[1][j]) && tris[1][j].equals(tris[2][j])
@@ -69,7 +69,7 @@ public class App {
                             System.out.println("Hai vinto!");
                             vittoria = true;
                         }
-    
+
                     } else { // Turno computer
                         if (caselle < 9 && vittoria == false) {
                             do {
@@ -80,37 +80,37 @@ public class App {
                             tris[riga][colonna] = "O";
                             System.out.println("Il computer ha giocato in posizione: " + riga + ", " + colonna);
                             // controllo righe
-                        for (int i = 0; i < 3; i++) {
-                            if (tris[i][0].equals(tris[i][1]) && tris[i][1].equals(tris[i][2])
-                                    && tris[i][0].equalsIgnoreCase("O")) {
-                                System.out.println("Hai vinto!");
+                            for (int i = 0; i < 3; i++) {
+                                if (tris[i][0].equals(tris[i][1]) && tris[i][1].equals(tris[i][2])
+                                        && tris[i][0].equalsIgnoreCase("O")) {
+                                    System.out.println("Hai vinto!");
+                                    vittoriaPC = true;
+                                }
+                            }
+
+                            // controllo colonne
+                            for (int j = 0; j < 3; j++) {
+                                if (tris[0][j].equals(tris[1][j]) && tris[1][j].equals(tris[2][j])
+                                        && tris[0][j].equalsIgnoreCase("O")) {
+                                    System.out.println("Il Pc ha vinto!");
+                                    vittoriaPC = true;
+                                }
+                            }
+                            // controllo diagonali
+                            if (tris[0][0].equals(tris[1][1]) && tris[1][1].equals(tris[2][2])
+                                    && tris[0][0].equalsIgnoreCase("O")) {
+                                System.out.println("Il Pc ha vinto!");
+                                vittoriaPC = true;
+                            }
+                            if (tris[0][2].equals(tris[1][1]) && tris[1][1].equals(tris[2][0])
+                                    && tris[0][2].equalsIgnoreCase("O")) {
+                                System.out.println("Il Pc ha vinto!");
                                 vittoriaPC = true;
                             }
                         }
-    
-                        // controllo colonne
-                        for (int j = 0; j < 3; j++) {
-                            if (tris[0][j].equals(tris[1][j]) && tris[1][j].equals(tris[2][j])
-                                    && tris[0][j].equalsIgnoreCase("O")) {
-                                System.out.println("Hai vinto!");
-                                vittoriaPC = true;
-                            }
-                        }
-                        // controllo diagonali
-                        if (tris[0][0].equals(tris[1][1]) && tris[1][1].equals(tris[2][2])
-                                && tris[0][0].equalsIgnoreCase("O")) {
-                            System.out.println("Hai vinto!");
-                            vittoriaPC = true;
-                        }
-                        if (tris[0][2].equals(tris[1][1]) && tris[1][1].equals(tris[2][0])
-                                && tris[0][2].equalsIgnoreCase("O")) {
-                            System.out.println("Hai vinto!");
-                            vittoriaPC = true;
-                        }
-                        }
-    
+
                     }
-    
+
                 } // Stampo il tabellone
                 for (int i = 0; i < tris.length; i++) {
                     for (int j = 0; j < tris[i].length; j++) {
@@ -118,19 +118,24 @@ public class App {
                     }
                     System.out.println();
                 }
-    
-                if (caselle == 9) {
+                if (vittoria) {
+                    System.out.println("Hai vinto sotto!");
+                } else if (vittoriaPC) {
+                    System.out.println("Ha vinto il PC sotto");
+                } else if (caselle == 9) {
+
                     System.out.println("Pareggio!");
                     again = false;
+
                 } else {
                     if (vittoriaPC == false && vittoria == false) {
                         // Chiedo se continuare
-                    System.out.println("Vuoi continuare? (true/false)");
-                    again = sc.nextBoolean();
+                        System.out.println("Vuoi continuare? (true/false)");
+                        again = sc.nextBoolean();
                     }
-                    
+
                 }
-    
+
             } while (again && !vittoria && !vittoriaPC);
             System.out.println("Vuoi giocare di nuovo?");
             newGame = sc.nextBoolean();
